@@ -16,11 +16,9 @@ app.get('/find', (req, res) => {
 function getCityNameFromGeolocation(data, lan, lon) {
     for (const location of data) {
         if (Math.abs(location.lat - lan) <= 0.1 && Math.abs(location.lng - lon) <= 0.1) {
-            console.log(location.city);
             return location;
         }
     }
-    console.log("City not found");
     return {
         status: "error",
         message: "City not found"

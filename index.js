@@ -12,6 +12,41 @@ app.get('/find', (req, res) => {
     res.json(cityName);
 });
 
+// app.get('/search', (req, res) => {
+//     const query = req.query.query;
+//     if (!query) {
+//         res.status(400).json({ error: 'Missing query parameter' });
+//         return;
+//     }
+
+//     const matchingCities = cities.filter(city => city.city_ascii.toUpperCase().startsWith(query.toUpperCase()));
+//     res.json({ results: matchingCities });
+// });
+
+app.get('/search', (req, res) => {
+    const query = req.query.query;
+    if (!query) {
+        res.status(400).json({ error: 'Missing query parameter' });
+        return;
+    }
+
+    const matchingCities = cities.filter(city => city.city_ascii.toUpperCase().startsWith(query.toUpperCase()));
+    if (matchingCities.length === 0) {
+        res.json({ message: 'No cities found' });
+        return;
+    }
+
+    const limitedResults = matchingCities.slice(0, 100);
+    res.json({ results: limitedResults });
+});
+
+app.get('/info', (req, res) => {
+    const count = cities.length;
+    res.json({ count });
+});
+
+
+
 // Define the function to retrieve city name from geolocation
 function getCityNameFromGeolocation(data, lan, lon) {
     for (const location of data) {
